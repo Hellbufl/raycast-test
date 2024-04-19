@@ -79,7 +79,7 @@ fn raycast(
     let mut current_cell = (start_pos.x.floor() as i32, start_pos.y.floor() as i32);
 
     if direction.x == 0.0 || direction.y == 0.0 {
-        let mut ray_length = start_pos.dot(direction); //wrong get offset
+        let mut ray_length = start_pos.fract().dot(direction);
 
         if ray_length < 0.0 { ray_length = ray_length.abs() }
         else                { ray_length = 1.0 - ray_length }
@@ -87,9 +87,10 @@ fn raycast(
         for _ in 1..RAYCAST_DEPTH {
             current_cell.0 += direction.x as i32;
             current_cell.1 += direction.y as i32;
-            ray_length += 1.0;
 
             if walls.contains(&current_cell) { return Some(ray_length) }
+
+            ray_length += 1.0;
         }
         return None;
     }
